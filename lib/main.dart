@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Push Notifications Demo'),
     );
   }
 }
@@ -60,7 +60,12 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   Future<void> initPlaformState() async {
+    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
     OneSignal.shared.setAppId(oneSignalAppId);
+    OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) => {
+      // ignore: avoid_print
+      print('Accepted permission: $accepted')
+    });
   }
 
   void _incrementCounter() {

@@ -72,4 +72,5 @@ flutter {
 dependencies {
     implementation 'com.onesignal:OneSignal:3.12.7'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
 }
