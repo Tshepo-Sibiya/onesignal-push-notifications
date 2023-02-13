@@ -33,6 +33,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736499389485:android:36ac68a2c3b4435de714a4",
+        "android_client_info": {
+          "package_name": "com.sasfin_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "736499389485-rc5c4esb1ulnkb2nd9klov7qe058hh51.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCa6X8w0rF2EfLG0g4U-eenArTBMIap0w4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "736499389485-rc5c4esb1ulnkb2nd9klov7qe058hh51.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

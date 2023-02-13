@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:push_app/detail_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,6 +15,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      onGenerateRoute: (settings) {
+        //print(settings.name);
+        return null;
+      },
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -24,7 +30,7 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
       home: const MyHomePage(title: 'Push Notifications Demo'),
     );
@@ -53,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    // Firebase
     initPlaformState();
   }
 
@@ -60,12 +67,29 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   Future<void> initPlaformState() async {
+    OneSignal.shared.setNotificationOpenedHandler((openedResult) {
+      // ignore: avoid_print, prefer_interpolation_to_compose_strings
+      print('The push is:' + openedResult.notification.notificationId);
+    });
+
     OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
     OneSignal.shared.setAppId(oneSignalAppId);
-    OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) => {
-      // ignore: avoid_print
-      print('Accepted permission: $accepted')
-    });
+    final status = await OneSignal.shared.getDeviceState();
+    final osUserID = status?.userId;
+    // ignore: avoid_print
+    print("OS user ID: ${osUserID!}");
+    OneSignal.shared.setExternalUserId("MyPortfolioAccessId");
+
+    OneSignal.shared
+        .promptUserForPushNotificationPermission()
+        .then((accepted) => {
+              // ignore: avoid_print
+              print('Accepted permission: $accepted')
+            });
+
+    // OneSignal.shared.setNotificationOpenedHandler((openedResult) {
+    //   print("user is: ${openedResult.notification}");
+    // });
   }
 
   void _incrementCounter() {
@@ -113,21 +137,71 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            const Center(
+              child: SpinKitFoldingCube(
+                color: Colors.black54,
+                size: 100,
+              ),
+            ),
+            const SizedBox(
+              height: 50.0,
+            ),
             const Text(
-              'You have pushed the button this many times:',
+              'Push notifications',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            // Text(
+            //   '$_counter',
+            //   style: Theme.of(context).textTheme.headline4,
+            // ),
+            const SizedBox(
+              height: 50.0,
             ),
+
+            Center(
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const DetailsScreen()));
+                    },
+                    icon: const Icon(Icons.arrow_back),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const DetailsScreen()));
+                    },
+                    icon: const Icon(Icons.arrow_forward),
+                  ),
+                ],
+              ),
+            ),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (builder) => DetailsScreen(),
+                    ),
+                  );
+                },
+                child: const Text('Next Page'),
+              ),
+            )
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _incrementCounter,
+      //   tooltip: 'Increment',
+      //   child: const Icon(Icons.add),
+      // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
